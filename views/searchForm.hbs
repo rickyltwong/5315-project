@@ -1,0 +1,61 @@
+<div class="container-fluid" style="height: 100%;">
+  <div class="row" style="height: 100%;">
+    <aside id="side-menu" class="col-md-4 bg-light p-4" style="height: 100%">
+      <h1 class="mb-4">Search Restaurants</h1>
+      <form action="/restaurants" method="post" class="w-100">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="page">Page:</label>
+            <input type="number" id="page" name="page" min="1" class="form-control" value="{{page}}">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="perPage">Restaurants Per Page:</label>
+            <input type="number" id="perPage" name="perPage" min="1" class="form-control" value="{{perPage}}">
+          </div>
+        </div>
+
+        <div class="form-group col-md-6">
+          <label for="borough">Borough:</label>
+          <select id="borough" name="borough" class="form-control">
+            <option value="Manhattan" {{#if (eq borough "Manhattan")}}selected{{/if}}>Manhattan</option>
+            <option value="Brooklyn" {{#if (eq borough "Brooklyn")}}selected{{/if}}>Brooklyn</option>
+            <option value="Queens" {{#if (eq borough "Queens")}}selected{{/if}}>Queens</option>
+            <option value="Bronx" {{#if (eq borough "Bronx")}}selected{{/if}}>Bronx</option>
+            <option value="Staten Island" {{#if (eq borough "Staten Island")}}selected{{/if}}>Staten Island</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 5%">Submit</button>
+      </form>
+    </aside>
+
+    <div id="main-content" class="col-md-8">
+      {{#if showResults}}
+        <div class="results-container p-4">
+          {{#each searchResultsObj}}
+            <div class="card mb-3">
+              <div class="card-body">
+                <h5 class="card-title">{{this.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">Borough: {{borough}}</h6>
+                <p class="card-text">
+                  Address: {{address.building}} {{address.street}}, {{address.zipcode}}<br>
+                  Cuisine: {{cuisine}}<br>
+                </p>
+                <p>Grades:</p>
+                <ul>
+                  {{#each grades}}
+                    <li>
+                      Date: {{dateFormat date}}, Grade: {{grade}}, Score: {{score}}
+                    </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <p>Please enter search form to display results.</p>
+      {{/if}}
+    </div>
+  </div>
+</div>

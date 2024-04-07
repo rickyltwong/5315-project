@@ -1,0 +1,116 @@
+const { validationResult } = require('express-validator');
+const restaurantDb = require('../config/database');
+
+const addNewRestaurant = async (req, res) => {
+  try {
+    const results = validationResult(req);
+    if (!results.isEmpty()) {
+      return res.status(400).json({ errors: results.array() });
+    }
+    const newRestaurant = await restaurantDb.addNewRestaurant(req.body);
+    res.status(201).json({
+      status: 'success',
+      data: newRestaurant,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getAllRestaurants = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const { page = 1, perPage = 5, borough } = req.query;
+
+    const results = await restaurantDb.getAllRestaurants(
+      page,
+      perPage,
+      borough,
+    );
+    res.status(200).json({
+      status: 'success',
+      results: results.length,
+      data: results,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getRestaurantById = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const restaurant = await restaurantDb.getRestaurantById(req.params.id);
+    if (restaurant) {
+      res.status(200).json({
+        status: 'success',
+        data: restaurant,
+      });
+    } else {
+      res.status(404).json({ error: 'Restaurant not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const updateRestaurantById = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const updatedRestaurant = await restaurantDb.updateRestaurantById(
+      req.params.id,
+      req.body,
+    );
+
+    if (!updatedRestaurant) {
+      return res.status(404).json({ error: 'Restaurant not found' });
+    }
+    res.status(200).json({
+      status: 'success',
+      data: updatedRestaurant,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteRestaurantById = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const deletedRestaurant = await restaurantDb.deleteRestaurantById(
+      req.params.id,
+    );
+
+    if (!deletedRestaurant) {
+      return res.status(404).json({ error: 'Restaurant not found' });
+    }
+
+    // 204 is not used here because the response should include a message
+    res.status(200).json({
+      status: 'success',
+      message: 'Restaurant deleted successfully',
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = {
+  addNewRestaurant,
+  getAllRestaurants,
+  getRestaurantById,
+  updateRestaurantById,
+  deleteRestaurantById,
+};
