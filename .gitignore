@@ -1,0 +1,11 @@
+.*
+.idea/**
+out/
+.idea_modules/
+desktop.ini
+/dist
+node_modules/
+!.gitignore
+!.env.example
+!.eslintrc.json
+!.prettierrc
