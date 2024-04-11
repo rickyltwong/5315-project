@@ -37,6 +37,7 @@
               <div class="card-body">
                 <h5 class="card-title">{{this.name}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Borough: {{borough}}</h6>
+                <button onclick="addLike('{{this._id}}')">Add</button> <div id="like-{{this._id}}"></div>
                 <p class="card-text">
                   Address: {{address.building}} {{address.street}}, {{address.zipcode}}<br>
                   Cuisine: {{cuisine}}<br>
