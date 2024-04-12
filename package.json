@@ -18,14 +18,18 @@
   },
   "homepage": "https://github.com/rickyltwong/5315-project#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-handlebars": "^7.1.2",
     "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.0",
     "morgan": "^1.10.0",
-    "node": "^18.20.1"
+    "node": "^18.20.1",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "eslint": "^8.57.0",

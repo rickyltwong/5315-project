@@ -10,6 +10,7 @@
 
 const express = require('express');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const { engine } = require('express-handlebars');
 
 const restaurantRouter = require('./routes/restaurantRoutes');
@@ -23,6 +24,7 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.engine(
   '.hbs',

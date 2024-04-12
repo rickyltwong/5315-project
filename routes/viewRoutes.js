@@ -11,8 +11,16 @@
 const express = require('express');
 const { body } = require('express-validator');
 const viewController = require('../controllers/viewController');
+const authController = require('../controllers/authController');
 
 const router = express.Router();
+
+router.get('/login', authController.isLoggedIn, viewController.renderLoginForm);
+router.get(
+  '/profile',
+  authController.protect,
+  viewController.renderProfilePage,
+);
 
 router
   .route('/restaurants')

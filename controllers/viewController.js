@@ -52,7 +52,39 @@ const renderRestaurantSearchResults = async (req, res) => {
   }
 };
 
+const renderLoginForm = async (req, res) => {
+  const { user } = res.locals;
+  if (user) {
+    return res.json({
+      body: {
+        message: 'You are already logged in',
+        data: { user },
+      },
+    });
+  }
+
+  // res.status(200).render('login', {
+  //   title: 'Log into your account'
+  // });
+
+  res.status(200).json({ body: 'Login form here' });
+};
+
+const renderProfilePage = async (req, res) => {
+  const { user } = res.locals;
+
+  res.json({
+    body: {
+      status: 'success',
+      message: 'This is your profile page',
+      data: { user },
+    },
+  });
+};
+
 module.exports = {
   renderRestaurantSearchForm,
   renderRestaurantSearchResults,
+  renderLoginForm,
+  renderProfilePage,
 };
