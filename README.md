@@ -5,11 +5,11 @@ This project focuses on developing a DB-driven Node/Express application with RES
 
 ## Tech Stack
 
-- Handlebars template engines (hbs)
-- Node/Express
-- MongoDB/Mongoose
-- Git
-- Vercel
+- Handlebars template engines (hbs): For UI rendering.
+- Node/Express: For the server-side application.
+- MongoDB/Mongoose: For the database and ODM.
+- Git: For version control.
+- Vercel: For deployment.
 
 ## Features
 
@@ -41,3 +41,30 @@ This project focuses on developing a DB-driven Node/Express application with RES
 ## Pages
 
 - `/restaurants` - A UI page for searching and viewing restaurants.
+- `/login` - A login page for authenticating users.
+- `/signup` - A signup page for creating new users.
+- `/profile` - A user profile page.
+
+## Installation
+
+### Pre-requisites
+Note that you need to have MongoDB installed and running on your local machine for database connection to work. 
+You can also use a cloud-based MongoDB service like MongoDB Atlas.
+
+### Steps
+
+To run this project locally, follow these steps:
+
+1. Clone the repository: `git clone git@github.com:rickyltwong/5315-project.git`
+2. Install dependencies: `npm install`
+3. Create a `.env` file with the following environment variables:
+   ```
+   PORT=3000
+   DB_CONNECTION_STRING=your_mongodb_connection_string
+   JWT_SECRET=your_secret_key
+   ```
+4. Start the server: `npm start`
+5. Visit `http://localhost:3000` in your browser.
+
+
+
