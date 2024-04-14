@@ -20,7 +20,7 @@ process.on('uncaughtException', err => {
 });
 
 const app = require('./app');
-const restaurantDb = require('./config/database');
+const restaurantDb = require('./services/restaurantDb');
 const PORT = process.env.PORT || 3000;
 
 let server;

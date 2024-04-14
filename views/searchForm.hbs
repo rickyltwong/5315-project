@@ -37,7 +37,8 @@
               <div class="card-body">
                 <h5 class="card-title">{{this.name}}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">Borough: {{borough}}</h6>
-                <button onclick="addLike('{{this._id}}')">Add</button> <div id="like-{{this._id}}"></div>
+                <button class="btn btn-primary btn-sm" onclick="addLike('{{this._id}}')">Upvote</button>
+                <span id="like-{{this._id}}">{{this.likesCount}}</span>
                 <p class="card-text">
                   Address: {{address.building}} {{address.street}}, {{address.zipcode}}<br>
                   Cuisine: {{cuisine}}<br>
@@ -60,3 +61,28 @@
     </div>
   </div>
 </div>
+
+
+<script>
+  async function addLike(_id) {
+    const res = await fetch(`/api/restaurants/${_id}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
+
+    if (res.status === 200) {
+      alert('Upvoted successfully.');
+      const { data } = await res.json();
+      document.getElementById(`like-${_id}`).innerText = data;
+    } else if (res.status === 204) {
+      alert('You have already upvoted this restaurant.');
+    } else {
+      alert('Failed to add like.');
+    }
+  }
+
+
+</script>

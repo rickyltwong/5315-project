@@ -9,7 +9,7 @@
  ******************************************************************************/
 
 const { validationResult } = require('express-validator');
-const restaurantDb = require('../config/database');
+const restaurantDb = require('../services/restaurantDb');
 
 const renderRestaurantSearchForm = async (req, res) => {
   res.render('searchForm', {
@@ -55,19 +55,12 @@ const renderRestaurantSearchResults = async (req, res) => {
 const renderLoginForm = async (req, res) => {
   const { user } = res.locals;
   if (user) {
-    return res.json({
-      body: {
-        message: 'You are already logged in',
-        data: { user },
-      },
-    });
+    return res.redirect('/restaurants');
   }
 
-  // res.status(200).render('login', {
-  //   title: 'Log into your account'
-  // });
-
-  res.status(200).json({ body: 'Login form here' });
+  res.status(200).render('loginForm', {
+    title: 'Log into your account',
+  });
 };
 
 const renderProfilePage = async (req, res) => {

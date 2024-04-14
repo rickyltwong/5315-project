@@ -9,52 +9,40 @@
  ******************************************************************************/
 
 const express = require('express');
-const { query, body, param } = require('express-validator');
-
-const { isObjectIdOrHexString } = require('../middlewares/validate');
-
-const restaurantController = require('../controllers/restaurantController');
 
 const router = express.Router();
+const restaurantController = require('../controllers/restaurantController');
+const authController = require('../controllers/authController');
+const {
+  validateNewRestaurant,
+  validatePagination,
+  validateObjectId,
+} = require('../middlewares/validations');
 
 router
   .route('/')
   .post(
-    [
-      body('name').not().isEmpty().withMessage('Name is required'),
-      body('restaurant_id')
-        .not()
-        .isEmpty()
-        .withMessage('Restaurant ID is required'),
-    ],
+    authController.protect,
+    validateNewRestaurant,
     restaurantController.addNewRestaurant,
   )
   .get(
-    [
-      query('page')
-        .optional()
-        .isInt({ min: 1 })
-        .withMessage('Page must be a positive integer')
-        .toInt(),
-      query('perPage')
-        .optional()
-        .isInt({ min: 1 })
-        .withMessage('PerPage must be a positive integer')
-        .toInt(),
-      query('borough').optional().escape(),
-    ],
+    authController.protect,
+    validatePagination,
     restaurantController.getAllRestaurants,
   );
 
 router
   .route('/:id')
-  .all(
-    param('id')
-      .custom((id) => isObjectIdOrHexString(id))
-      .withMessage('Invalid Object ID'),
-  )
+  .all(authController.protect, validateObjectId)
   .get(restaurantController.getRestaurantById)
   .put(restaurantController.updateRestaurantById)
   .delete(restaurantController.deleteRestaurantById);
+
+router.post(
+  '/:id/like',
+  authController.protect,
+  restaurantController.addLikeRestaurant,
+);
 
 module.exports = router;

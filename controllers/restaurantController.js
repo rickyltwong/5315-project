@@ -9,7 +9,7 @@
  ******************************************************************************/
 
 const { validationResult } = require('express-validator');
-const restaurantDb = require('../config/database');
+const restaurantDb = require('../services/restaurantDb');
 
 const addNewRestaurant = async (req, res) => {
   try {
@@ -117,10 +117,47 @@ const deleteRestaurantById = async (req, res) => {
   }
 };
 
+const addLikeRestaurant = async (req, res) => {
+  try {
+    const restaurantId = req.params.id;
+    console.log('restaurantId:', restaurantId, 'userId:', req.user.id);
+    if (!restaurantId) {
+      return res.status(400).json({ message: 'Restaurant ID is required' });
+    }
+
+    let restaurant = await restaurantDb.getRestaurantById(restaurantId);
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+
+    const likeList = restaurant.likes || [];
+
+    if (likeList.includes(req.user.id)) {
+      return res
+        .status(204)
+        .json({ message: 'User has already liked this restaurant' });
+    }
+
+    restaurant = await restaurantDb.pushUserIdToLikes(
+      restaurantId,
+      req.user.id,
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: restaurant.likesCount,
+    });
+  } catch (err) {
+    console.error('Error liking restaurant:', err);
+    res.status(500).json({ message: 'Error processing your request' });
+  }
+};
+
 module.exports = {
   addNewRestaurant,
   getAllRestaurants,
   getRestaurantById,
   updateRestaurantById,
   deleteRestaurantById,
+  addLikeRestaurant,
 };

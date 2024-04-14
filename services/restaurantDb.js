@@ -36,6 +36,22 @@ const restaurantDb = {
 
   deleteRestaurantById: async (id) =>
     await Restaurant.findByIdAndDelete(id).exec(),
+
+  pushUserIdToLikes: async (id, userId) => {
+    const restaurant = await Restaurant.findById(id).exec();
+
+    if (!restaurant.likes) {
+      restaurant.likes = [];
+    }
+
+    if (restaurant.likes.includes(userId)) {
+      return restaurant;
+    }
+
+    restaurant.likes.push(userId);
+
+    return await restaurant.save();
+  },
 };
 
 module.exports = restaurantDb;

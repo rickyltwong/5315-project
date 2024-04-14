@@ -15,6 +15,8 @@ const { engine } = require('express-handlebars');
 
 const restaurantRouter = require('./routes/restaurantRoutes');
 const viewRouter = require('./routes/viewRoutes');
+const userRouter = require('./routes/userRoutes');
+const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
 
@@ -44,6 +46,7 @@ app.set('view engine', '.hbs');
 
 app.use('/', viewRouter);
 app.use('/api/restaurants', restaurantRouter);
+app.use('/api/users', userRouter);
 
 app.all('*', (req, res, next) => {
   res.status(404).json({
@@ -51,5 +54,7 @@ app.all('*', (req, res, next) => {
     message: `Can't find ${req.originalUrl} on this server!`,
   });
 });
+
+app.use(globalErrorHandler);
 
 module.exports = app;

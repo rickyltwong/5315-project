@@ -24,7 +24,7 @@ router.get(
 
 router
   .route('/restaurants')
-  .get(viewController.renderRestaurantSearchForm)
+  .get(authController.protect, viewController.renderRestaurantSearchForm)
   .post(
     [
       body('page')

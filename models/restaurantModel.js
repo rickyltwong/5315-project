@@ -65,12 +65,19 @@ const restaurantSchema = new mongoose.Schema(
     grades: {
       type: [gradeSchema],
     },
+    likes: {
+      type: [String],
+    },
   },
   {
     collection: 'restaurants',
     toObject: { getters: true, virtuals: true, versionKey: false },
   },
 );
+
+restaurantSchema.virtual('likesCount').get(function () {
+  return this.likes.length;
+});
 
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
