@@ -16,17 +16,19 @@ This project focuses on developing a DB-driven Node/Express application with RES
 - **CRUD Operations:** Create, read, update and delete restaurants.
 - **Pagination and Filtering**: Retrieve restaurants with options for pagination and filtering by borough.
 - **User Interface:** Simple UI to display restaurant data.
-- **Security:** Implement JWT authentication for secure API access.
+- **Security:** Implement JWT authentication for secure API access (All restaurant have limited access).
+- **EXTRA FUNCTIONALITY: Upvote**: User can upvote a restaurant.
 
 ## Project Structure
 
 - `app.js` - Main application file.
 - `server.js` - Express server configuration.
-- `/config` - Configuration files, including database configuration (also include DB operations and exported as a module as per project requirement).
+- `/services` - services logic including database configuration (also include DB operations and exported as a module as per project requirement).
 - `/routes` - Contains the route definitions for the API.
 - `/models` - Mongoose models for MongoDB documents.
 - `/views` - Handlebars templates for the UI.
 - `/controllers` - Contains handlers for the routes.
+- `/middlewares` - Contains middleware functions.
 - `.env` - Environment variables file (not included in the repository).
 - ... (to be updated)
 
@@ -40,6 +42,7 @@ This project focuses on developing a DB-driven Node/Express application with RES
 
 ## Pages
 
+- `/` - The home page (redirected to `/login`).
 - `/restaurants` - A UI page for searching and viewing restaurants.
 - `/login` - A login page for authenticating users.
 - `/signup` - A signup page for creating new users.
@@ -62,9 +65,14 @@ To run this project locally, follow these steps:
    PORT=3000
    DB_CONNECTION_STRING=your_mongodb_connection_string
    JWT_SECRET=your_secret_key
+   JWT_EXPIRES_IN=1440
+   JWT_COOKIE_EXPIRES_IN=1440
    ```
 4. Start the server: `npm start`
 5. Visit `http://localhost:3000` in your browser.
 
+### Remark
+
+For demonstration purpose, JWT will not be expired.
 
 
