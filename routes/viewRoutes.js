@@ -15,6 +15,10 @@ const authController = require('../controllers/authController');
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  res.redirect('/login');
+});
+
 router.get('/login', authController.isLoggedIn, viewController.renderLoginForm);
 router.get(
   '/profile',
