@@ -7,26 +7,36 @@
  Name: Ricky L. T. Wong Student ID: N01581738 Date: 2024-04-07
  ******************************************************************************/
 
+process.on('uncaughtException', err => {
+  console.log('UNCAUGHT EXCEPTION! Shutting down...', err);
+  process.exit(1);
+});
+
 const dotenv = require('dotenv');
 dotenv.config();
-
-const app = require('./app');
 const restaurantDb = require('./services/restaurantDb');
+const app = require('./app');
+const PORT = process.env.PORT || 3000;
 
-process.on('uncaughtException', err => {
-  console.error('UNCAUGHT EXCEPTION! Shutting down...', err);
-});
-
-module.exports = async (req, res) => {
+async function main() {
   try {
     await restaurantDb.initialize(process.env.DB_CONNECTION_STRING || "");
-    app(req, res);
-  } catch (error) {
-    console.error('Failed to initialize database or handle the request:', error);
-    res.status(500).send("Server error");
-  }
-};
+    console.log('Database initialized successfully');
 
-process.on('unhandledRejection', err => {
-  console.error('Unhandled rejection! Handling...', err);
-});
+    const server = app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
+    process.on('unhandledRejection', err => {
+      console.log('Unhandled rejection! Shutting down...', err);
+      server.close(() => {
+        process.exit(1);
+      });
+    });
+  } catch (error) {
+    console.error('Failed to initialize database or start the server:', error);
+    process.exit(1);
+  }
+}
+
+main();
