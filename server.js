@@ -23,7 +23,7 @@ const app = require('./app');
 const restaurantDb = require('./services/restaurantDb');
 // const PORT = process.env.PORT || 3000; // Not in vercel deployment
 
-let server;
+// let server;
 
 restaurantDb.initialize(process.env.DB_CONNECTION_STRING || "")
   .then(() => {
@@ -41,9 +41,9 @@ restaurantDb.initialize(process.env.DB_CONNECTION_STRING || "")
 
 process.on('unhandledRejection', err => {
   console.log('Unhandled rejection! Shutting down...', err);
-  server.close(() => {
-    process.exit(1);
-  });
+  // server.close(() => {
+  //   process.exit(1);
+  // });
 });
 
 // Not in server deployment

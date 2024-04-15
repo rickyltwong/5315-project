@@ -1,5 +1,5 @@
 /******************************************************************************
- ITE5315 – Project
+ ITE5315 â Project
  I declare that this assignment is my own work in accordance with Humber Academic
  Policy.
  No part of this assignment has been copied manually or electronically from any other
@@ -8,11 +8,17 @@
  Name: Ricky L. T. Wong Student ID: N01581738 Date: 2024-04-07
  ******************************************************************************/
 
+// Import necessary libraries
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const { engine } = require('express-handlebars');
+const dotenv = require('dotenv');
 
+// Configure environment variables
+dotenv.config();
+
+const { join } = require('node:path');
 const restaurantRouter = require('./routes/restaurantRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -23,9 +29,8 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true })); // Not in vercel deployment
+// app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.engine(
@@ -43,7 +48,9 @@ app.engine(
   }),
 );
 app.set('view engine', '.hbs');
+app.set('views', join(__dirname, 'views'));
 
+// Routers
 app.use('/', viewRouter);
 app.use('/api/restaurants', restaurantRouter);
 app.use('/api/users', userRouter);
