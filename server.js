@@ -1,45 +1,32 @@
 /* eslint-disable */
 /******************************************************************************
- ITE5315 â Project
+ ITE5315 – Project
  I declare that this assignment is my own work in accordance with Humber Academic
- Policy.
- No part of this assignment has been copied manually or electronically from any other
- source
- (including web sites) or distributed to other students.
+ Policy. No part of this assignment has been copied manually or electronically from
+ any other source (including web sites) or distributed to other students.
  Name: Ricky L. T. Wong Student ID: N01581738 Date: 2024-04-07
  ******************************************************************************/
 
-
 const dotenv = require('dotenv');
-
 dotenv.config();
-
-process.on('uncaughtException', err => {
-  console.log('UNCAUGHT EXCEPTION! Shutting down...', err);
-  process.exit(1);
-});
 
 const app = require('./app');
 const restaurantDb = require('./services/restaurantDb');
-const PORT = process.env.PORT || 3000;
 
-let server;
+process.on('uncaughtException', err => {
+  console.error('UNCAUGHT EXCEPTION! Shutting down...', err);
+});
 
-restaurantDb.initialize(process.env.DB_CONNECTION_STRING || "")
-  .then(() => {
-    console.log('Database initialized successfully');
-    server = app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Failed to initialize database or start the server:', error);
-    process.exit(1);
-  });
+module.exports = async (req, res) => {
+  try {
+    await restaurantDb.initialize(process.env.DB_CONNECTION_STRING || "");
+    app(req, res);
+  } catch (error) {
+    console.error('Failed to initialize database or handle the request:', error);
+    res.status(500).send("Server error");
+  }
+};
 
 process.on('unhandledRejection', err => {
-  console.log('Unhandled rejection! Shutting down...', err);
-  server.close(() => {
-    process.exit(1);
-  });
+  console.error('Unhandled rejection! Handling...', err);
 });

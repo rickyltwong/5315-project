@@ -8,14 +8,12 @@
  Name: Ricky L. T. Wong Student ID: N01581738 Date: 2024-04-07
  ******************************************************************************/
 
-// Import necessary libraries
 const express = require('express');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const { engine } = require('express-handlebars');
 const dotenv = require('dotenv');
 
-// Configure environment variables
 dotenv.config();
 
 const { join } = require('node:path');
@@ -23,13 +21,12 @@ const restaurantRouter = require('./routes/restaurantRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const userRouter = require('./routes/userRoutes');
 const globalErrorHandler = require('./controllers/errorController');
-const restaurantDb = require('./services/restaurantDb');
 
 const app = express();
 
-// if (process.env.NODE_ENV === 'development') {
-//   app.use(morgan('dev'));
-// }
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -64,12 +61,4 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-module.exports = async (req, res) => {
-  try {
-    await restaurantDb.initialize(process.env.DB_CONNECTION_STRING || '');
-    app(req, res);
-  } catch (error) {
-    console.error('Failed to initialize database:', error);
-    res.status(500).send('Server error');
-  }
-};
+module.exports = app;
