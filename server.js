@@ -21,13 +21,15 @@ process.on('uncaughtException', err => {
 
 const app = require('./app');
 const restaurantDb = require('./services/restaurantDb');
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
 
 let server;
 
 restaurantDb.initialize(process.env.DB_CONNECTION_STRING || "")
   .then(() => {
     console.log('Database initialized successfully');
+
+    // Not in vercel deployment
     server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on port ${PORT}`);
     });
@@ -43,3 +45,6 @@ process.on('unhandledRejection', err => {
     process.exit(1);
   });
 });
+
+// Not in server deployment
+// module.exports = app;
