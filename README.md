@@ -62,17 +62,19 @@ To run this project locally, follow these steps:
 2. Install dependencies: `npm install`
 3. Create a `.env` file with the following environment variables:
    ```
-   PORT=3000
+   PORT=3001
    DB_CONNECTION_STRING=your_mongodb_connection_string
    JWT_SECRET=your_secret_key
    JWT_EXPIRES_IN=1440
    JWT_COOKIE_EXPIRES_IN=1440
    ```
 4. Start the server: `npm start`
-5. Visit `http://localhost:3000` in your browser.
+5. Visit `http://localhost:3001` in your browser.
 
 ### Remark
 
-For demonstration purpose, JWT will not be expired.
+- For demonstration purpose, JWT will not be expired.
+- The project is deployed on Vercel, you can visit the [link](https://5315-project-iaz57gz4p-ricky-wongs-projects-1a627b85.vercel.app/).
+- The code for vercel deployment is in the `vercel` branch.
 
 
