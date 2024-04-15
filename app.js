@@ -23,12 +23,13 @@ const restaurantRouter = require('./routes/restaurantRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const userRouter = require('./routes/userRoutes');
 const globalErrorHandler = require('./controllers/errorController');
+const restaurantDb = require('./services/restaurantDb');
 
 const app = express();
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
+// if (process.env.NODE_ENV === 'development') {
+//   app.use(morgan('dev'));
+// }
 app.use(express.json());
 // app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -50,7 +51,6 @@ app.engine(
 app.set('view engine', '.hbs');
 app.set('views', join(__dirname, 'views'));
 
-// Routers
 app.use('/', viewRouter);
 app.use('/api/restaurants', restaurantRouter);
 app.use('/api/users', userRouter);
@@ -64,4 +64,12 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-module.exports = app;
+module.exports = async (req, res) => {
+  try {
+    await restaurantDb.initialize(process.env.DB_CONNECTION_STRING || '');
+    app(req, res);
+  } catch (error) {
+    console.error('Failed to initialize database:', error);
+    res.status(500).send('Server error');
+  }
+};
