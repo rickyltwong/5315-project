@@ -30,6 +30,7 @@ router
   .route('/restaurants')
   .get(authController.protect, viewController.renderRestaurantSearchForm)
   .post(
+    authController.protect,
     [
       body('page')
         .isInt({ min: 1 })
